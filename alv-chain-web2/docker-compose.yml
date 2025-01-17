@@ -1,0 +1,36 @@
+version: "3.7"
+services:
+  al-kalam-backend:
+    build: .
+    image: al-kalam-backend-img
+    container_name: al-kalam-backend
+    restart: always
+    tty: true
+    ports:
+      - 5015:5000
+    networks:
+      - app-network
+    healthcheck:
+      test: curl -sS http://localhost:5000 || exit 1
+      interval: 5s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+
+  # redis-al-kalam:
+  #   image: "redis:alpine"
+  #   restart: always
+  #   container_name: redis-al-kalam
+  #   environment:
+  #     - REDIS_REPLICATION_MODE=master
+  #   networks:
+  #     - app-network
+
+networks:
+  app-network:
+    driver: bridge
+    external: true
+
+volumes:
+  dbdata:
+    driver: local
