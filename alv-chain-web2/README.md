@@ -1,73 +1,101 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
+# ALVChain Backend (Web2 Service)
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+Backend API for ALVChain, implemented with NestJS and TypeScript. This service provides user, profile, asset category, liability, and user-asset mapping modules, with PostgreSQL and Redis integration.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## Authors
 
-## Description
+1. Rifat Al Mamun Rudro(https://www.aiub.edu/faculty-list/faculty-profile?q=mamun.rudro#mamun.rudro@aiub.edu)
+2. Md. Hamid Uddin (https://www.aiub.edu/faculty-list/faculty-profile?q=hamid.uddin#hamid.uddin@aiub.edu)
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+## Tech Stack
 
-## Installation
+- NestJS (TypeScript)
+- PostgreSQL (TypeORM)
+- Redis (cache/queue)
+- Docker + Docker Compose
 
-```bash
-$ pnpm install
-```
+## Repository Structure
 
-## Running the app
+- `alv-chain-web2/`: backend API source code
+- `blockhain/`: Solidity contracts and blockchain-related artifacts
+
+## Prerequisites
+
+- Node.js 20+
+- pnpm 8+
+- Docker Desktop (or Docker Engine + Compose)
+
+## Local Development (Without Docker)
+
+1. Copy the environment template:
 
 ```bash
-# development
-$ pnpm run start
-
-# watch mode
-$ pnpm run start:dev
-
-# production mode
-$ pnpm run start:prod
+cp .env.example .env
 ```
 
-## Test
+2. Install dependencies:
 
 ```bash
-# unit tests
-$ pnpm run test
-
-# e2e tests
-$ pnpm run test:e2e
-
-# test coverage
-$ pnpm run test:cov
+pnpm install
 ```
 
-## Support
+3. Start the development server:
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+```bash
+pnpm run start:dev
+```
 
-## Stay in touch
+The API runs on `http://localhost:5000` by default.
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+## Docker Setup
 
-## License
+The repository includes a self-contained Docker Compose setup with:
 
-Nest is [MIT licensed](LICENSE).
+- `app`: NestJS backend
+- `postgres`: PostgreSQL database
+- `redis`: Redis cache/queue
+
+Run:
+
+```bash
+docker compose up --build
+```
+
+Run in background:
+
+```bash
+docker compose up --build -d
+```
+
+Stop and clean up:
+
+```bash
+docker compose down
+```
+
+## Useful Commands
+
+```bash
+pnpm run build
+pnpm run lint
+pnpm run migration:run
+pnpm run migration:rollback
+pnpm run seeder:run
+```
+
+## Smart Contracts (ERC-721)
+
+ERC-721 Solidity contracts are included in the repository under:
+
+- `blockhain/contracts/ALVAssetNFT.sol`
+- `blockhain/contracts/ALVIdentityBadge.sol`
+
+## 9. Data Availability Statement
+
+All artifacts required to reproduce this submission are provided in this repository:
+
+- Backend implementation and configuration: `alv-chain-web2/`
+- Dockerized execution environment: `alv-chain-web2/Dockerfile` and `alv-chain-web2/docker-compose.yml`
+- Solidity smart contracts (including ERC-721): `blockhain/contracts/`
+
+No external private codebase is required to run or inspect the submitted implementation.

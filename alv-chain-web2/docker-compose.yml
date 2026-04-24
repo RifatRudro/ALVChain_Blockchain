@@ -1,36 +1,67 @@
-version: "3.7"
 services:
-  al-kalam-backend:
-    build: .
-    image: al-kalam-backend-img
-    container_name: al-kalam-backend
-    restart: always
-    tty: true
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: alv-chain-web2-api:latest
+    container_name: alv-chain-web2-api
+    restart: unless-stopped
+    env_file:
+      - .env.docker
     ports:
-      - 5015:5000
+      - "5000:5000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      mailpit:
+        condition: service_started
     networks:
       - app-network
-    healthcheck:
-      test: curl -sS http://localhost:5000 || exit 1
-      interval: 5s
-      timeout: 10s
-      retries: 3
-      start_period: 30s
 
-  # redis-al-kalam:
-  #   image: "redis:alpine"
-  #   restart: always
-  #   container_name: redis-al-kalam
-  #   environment:
-  #     - REDIS_REPLICATION_MODE=master
-  #   networks:
-  #     - app-network
+  postgres:
+    image: postgres:15-alpine
+    container_name: alv-chain-web2-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: alvchain
+      POSTGRES_USER: alvchain
+      POSTGRES_PASSWORD: alvchain
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U alvchain -d alvchain"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    networks:
+      - app-network
+
+  redis:
+    image: redis:7-alpine
+    container_name: alv-chain-web2-redis
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    networks:
+      - app-network
+
+  mailpit:
+    image: axllent/mailpit:latest
+    container_name: alv-chain-web2-mailpit
+    restart: unless-stopped
+    ports:
+      - "8025:8025"
+    networks:
+      - app-network
 
 networks:
   app-network:
     driver: bridge
-    external: true
 
 volumes:
-  dbdata:
-    driver: local
+  postgres_data:
